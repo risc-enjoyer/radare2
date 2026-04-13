@@ -148,6 +148,8 @@ struct Elf_(obj_t) {
 	char *dynstr;
 	ut32 dynstr_size;
 
+	ut64 plt_addr;
+
 	RBinImport **imports_by_ord;
 	size_t imports_by_ord_size;
 	RBinSymbol **symbols_by_ord;

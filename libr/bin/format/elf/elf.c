@@ -1613,6 +1613,7 @@ static bool elf_init(ELFOBJ *eo) {
 	}
 	relro_insdb (eo);
 
+	eo->plt_addr = R_BIN_ELF_ADDR_MAX;
 	eo->imports_by_ord_size = 0;
 	eo->imports_by_ord = NULL;
 	eo->symbols_by_ord_size = 0;
@@ -1737,18 +1738,18 @@ static ut64 get_import_addr_arm64(ELFOBJ *eo, RBinElfReloc *rel) {
 }
 
 static ut64 get_import_addr_mips(ELFOBJ *bin, RBinElfReloc *rel) {
-	ut64 jmprel_addr = bin->dyn_info.dt_jmprel;
 	ut64 got_addr = bin->dyn_info.dt_mips_pltgot;
-	if (jmprel_addr != R_BIN_ELF_ADDR_MAX && got_addr != R_BIN_ELF_ADDR_MAX) {
+	if (bin->plt_addr != R_BIN_ELF_ADDR_MAX && got_addr != R_BIN_ELF_ADDR_MAX) {
 		ut64 pos = COMPUTE_PLTGOT_POSITION (rel, got_addr, 0x2);
 		ut8 buf[128]; /// XXX why arbitrary 128
-		ut64 plt_addr = jmprel_addr + bin->dyn_info.dt_pltrelsz;
+		ut64 plt_addr = bin->plt_addr; 
 		ut64 p_plt_addr = Elf_(v2p_new) (bin, plt_addr);
 		int res = r_buf_read_at (bin->b, p_plt_addr, buf, sizeof (buf));
 		if (res == sizeof (buf)) {
 			const ut8 *base = r_mem_mem_aligned (buf, sizeof (buf), (const ut8 *)"\x3c\x0f\x00", 3, 4);
-			plt_addr += base? (int)(size_t) (base - buf):  MIPS_PLT_OFFSET + 8; // HARDCODED HACK
+			plt_addr += base? (int)(size_t) (base - buf):  MIPS_PLT_OFFSET; // HARDCODED HACK
 			plt_addr += pos * 16;
+			R_LOG_DEBUG("o_O Import address for symbol[%d]=0x%llx", rel->sym, plt_addr);
 			return plt_addr;
 		}
 	}
@@ -4283,6 +4284,10 @@ static const RVecRBinElfSection *_load_elf_sections(ELFOBJ *eo) {
 			unknown_count++;
 		}
 		section->name[ELF_STRING_LENGTH - 1] = '\0';
+		if(!strcmp(section->name, ".plt")){
+			eo->plt_addr = section->rva;
+			R_LOG_DEBUG("^-^ PLT address=0x%llx\n", eo->plt_addr);
+		}
 	}
 
 	return &eo->g_sections;
