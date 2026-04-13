@@ -5,7 +5,7 @@
 [![Latest packaged version](https://repology.org/badge/latest-versions/radare2.svg)](https://repology.org/project/radare2/versions) [![Tests Status](https://github.com/radareorg/radare2/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/radareorg/radare2/actions/workflows/ci.yml?query=branch%3Amaster) [![build](https://github.com/radareorg/radare2/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/radareorg/radare2/actions/workflows/build.yml?query=branch%3Amaster) [![tcc](https://github.com/radareorg/radare2/actions/workflows/tcc.yml/badge.svg?branch=master)](https://github.com/radareorg/radare2/actions/workflows/tcc.yml)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/741/badge)](https://bestpractices.coreinfrastructure.org/projects/741) [![Build Status](https://scan.coverity.com/projects/416/badge.svg)](https://scan.coverity.com/projects/416) [![Discord](https://badgen.net/discord/members/YBey7CR9jf)](https://discord.gg/YBey7CR9jf)
 
-Current git `master` branch is `6.1.4`, next release will be `6.1.6`.
+Current git `master` branch is `6.1.5`, next release will be `6.1.6`.
 
 ### Description
 
@@ -77,6 +77,7 @@ Using the `r2pm` tool you can browse and install many plugins and tools that use
 * [r2sarif](https://github.com/radareorg/r2sarif) import/extend/export SARIF documents
 * [r2hermes](https://github.com/radareorg/r2hermes) Disassembler and analyzer for React Native Hermes bytecode
 * [r2renef](https://github.com/Ahmeth4n/r2renef) Renef IO Plugin for Radare2 - Dynamic Android Instrumentation
+* [warrp](https://github.com/radareorg/warrp) Native radare2 plugin for the binary ninja's WARP format
 
 ## Usage
 

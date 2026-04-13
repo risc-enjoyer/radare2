@@ -105,6 +105,15 @@ jobs:
       uses: actions/checkout@v6
     - name: Creating zip and tarball
       run: sys/tarball.sh
+    - name: Building from the generated tarball
+      run: |
+        set -e
+        mkdir -p /tmp/tarball-build
+        tar -xf radare2-?.?.?.tar.xz -C /tmp/tarball-build
+        cd /tmp/tarball-build/radare2-*
+        ./configure --prefix=/tmp/tarball-install
+        make -j$(nproc)
+        make install
     - uses: actions/upload-artifact@v7
       with:
         name: tarball
@@ -662,7 +671,7 @@ jobs:
       uses: actions/checkout@v6
     - uses: actions/setup-python@v6
       with:
-        python-version: '3.11'
+        python-version: '3.12'
     - name: Preparing MSVC for ARM64
       uses: ilammy/msvc-dev-cmd@v1
       with:
@@ -886,7 +895,7 @@ jobs:
         run: sha256sum $ASSET_FILES | awk '{sub(".*/", "", $2); print $1"  "$2}' > checksums.txt
       - name: Create GitHub release
         id: create_release
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
         with:
           name: ${{ steps.r2v.outputs.branch }}
           tag_name: ${{ needs.check_release.outputs.tag_name }}
